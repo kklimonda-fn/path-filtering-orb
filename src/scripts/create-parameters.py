@@ -20,6 +20,12 @@ def checkout(revision):
 output_path = os.environ.get('OUTPUT_PATH')
 head = os.environ.get('CIRCLE_SHA1')
 base_revision = os.environ.get('BASE_REVISION')
+if base_revision == "":
+    # base-revision parameter passed to path-filtering/filter was empty, which is not
+    # great but possible. See
+    # https://discuss.circleci.com/t/pipeline-git-base-revision-is-completely-unreliable/38301
+    print("BASE_REVISION is empty. Using FALLBACK_BASE_REVISION instead.")
+    base_revision = os.environ.get("FALLBACK_BASE_REVISION")
 checkout(base_revision)  # Checkout base revision to make sure it is available for comparison
 checkout(head)  # return to head commit
 

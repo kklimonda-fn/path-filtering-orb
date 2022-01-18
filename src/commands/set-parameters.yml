@@ -9,6 +9,13 @@ parameters:
     description: >
       The revision to compare the current one against for the purpose
       of determining changed files.
+  fallback-base-revision:
+    type: string
+    default: "main"
+    description: >
+      The revision to fallback to when base-revision is not set to anything.
+      This works around a CircleCI bug where << pipeline.git.base_revision >>
+      is empty for some pipelines.
   mapping:
     type: string
     default: ""
@@ -25,6 +32,7 @@ steps:
   - run:
       environment:
         BASE_REVISION: << parameters.base-revision >>
+        FALLBACK_BASE_REVISION: << parameters.fallback-base-revision >>
         MAPPING: << parameters.mapping >>
         OUTPUT_PATH: << parameters.output-path >>
       name: Set parameters
